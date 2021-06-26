@@ -8,6 +8,7 @@ import { Button } from '@blueprintjs/core/lib/esm/components/button/buttons';
 import { useAsyncFn } from 'react-use';
 import { FormData } from './AddressForm/AddressForm';
 import { Transaction, Transactions } from '../Body';
+import {getExchangeRate} from "../../../api/getExchangeRate";
 
 
 export const AccountEditOverlay: React.FC<{
@@ -25,6 +26,12 @@ export const AccountEditOverlay: React.FC<{
     const result = await getAddressTransactions(checkedAddress);
     const result1 = await getAddressTransactions(checkedAddress);
     console.log(result1);
+    const exchangeRate = await getExchangeRate('ethereum', 'usd');
+    console.log('******************  BEGIN  ********************');
+    if ((exchangeRate as Error).message) console.log((exchangeRate as Error).message);
+    if (exchangeRate as number) console.log(exchangeRate);
+    console.log('******************  END  ********************');
+
     if (result.status >= 200 && result.status < 300) {
       setTransactions(result.data.data);
       // setTransactions(result1.data.data.items);
