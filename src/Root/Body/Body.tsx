@@ -1,39 +1,62 @@
 import React, { useState } from 'react';
 import styles from './Body.module.scss';
-import { TransactionEntry } from './TransactionEntry/TransactionEntry';
 import { AddressInput } from './AddressInput/AddressInput';
 import { AccountEditOverlay } from './AccountEditOverlay/AccountEditOverlay';
 
-export type Transactions = {
+export type DataResponse = {
   address: string;
   items: Transaction[];
-}
-
-export type Transaction = {
-  block_signed_at: string,
-  from_address: string,
-  gas_offered: number,
-  gas_price: number,
-  gas_spent: number,
-  to_address: string,
-  tx_hash: string,
-  value: string
 };
 
+export type Transaction = {
+  block_signed_at: string;
+  from_address: string;
+  gas_offered: number;
+  gas_price: number;
+  gas_spent: number;
+  to_address: string;
+  tx_hash: string;
+  value: string;
+};
 
 const BodyContent: React.FC<{
-  transactions: Transactions;
-  // transactions: Transactions;
+  dataResponse: DataResponse;
   showOverlay: () => void;
-}> = ({ transactions, showOverlay }) => {
-
+}> = ({ dataResponse, showOverlay }) => {
   return (
     <div className={styles.wrapper}>
-      <AddressInput address={transactions.address} showOverlay={showOverlay} />
+      <AddressInput address={dataResponse.address} showOverlay={showOverlay} />
       <div className={styles.transactionItems}>
-        {transactions.items.map((item: Transaction) => (
-          <TransactionEntry item={item}  />
-        ))}
+        <table>
+          <thead>
+            <tr>
+              <th>tx_hash</th>
+              <th>block_signed_at</th>
+              <th>from_address</th>
+              <th>gas_offered</th>
+              <th>gas_price</th>
+              <th>gas_spent</th>
+              <th>to_address</th>
+              <th>value</th>
+            </tr>
+          </thead>
+          <tbody>
+            {dataResponse.items.map(tx => {
+              return (
+                <tr key={tx.tx_hash}>
+                  <td>{tx.tx_hash}</td>
+                  <td>{tx.block_signed_at}</td>
+                  <td>{tx.from_address}</td>
+                  <td>{tx.gas_offered}</td>
+                  <td>{tx.gas_price}</td>
+                  <td>{tx.gas_spent}</td>
+                  <td>{tx.to_address}</td>
+                  <td>{tx.value}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
       </div>
     </div>
   );
@@ -42,15 +65,12 @@ const BodyContent: React.FC<{
 export const Body: React.FC = () => {
   const [isOverlayVisible, setIsOverlayVisible] = useState(true);
   const [transactions, setTransactions] = useState<any>();
-  // const [transactions, setTransactions] = useState<any>();
-
 
   return (
     <div className={styles.root}>
       {transactions && transactions.items && (
         <BodyContent
-        transactions={transactions}
-          // transactions={transactions}
+          dataResponse={transactions}
           showOverlay={() => {
             setIsOverlayVisible(true);
           }}
@@ -59,9 +79,7 @@ export const Body: React.FC = () => {
       <div style={{ display: isOverlayVisible ? 'block' : 'none' }}>
         <AccountEditOverlay
           setTransactions={setTransactions}
-          // setTransactions={setTransactions}
           transactions={transactions}
-          // transactions={transactions}
           hideOverlay={() => setIsOverlayVisible(false)}
         />
       </div>

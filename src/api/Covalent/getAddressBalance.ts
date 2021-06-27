@@ -1,8 +1,10 @@
-import { client } from "./client";
+import { client } from './Client';
 
-export const getAddressTransactions = async (address: string) => {
+export const getAddressBalance = async (address: string) => {
   try {
-    const result = await client.get(`https://api.covalenthq.com/v1/1/address/${address}/transactions_v2/`)
+    const result = await client.get(
+      `https://api.covalenthq.com/v1/1/address/${address}/balances_v2/?nft=false`,
+    );
     return result;
   } catch (error) {
     if (error.response) {
@@ -19,4 +21,4 @@ export const getAddressTransactions = async (address: string) => {
       return error.message;
     }
   }
-}
+};
