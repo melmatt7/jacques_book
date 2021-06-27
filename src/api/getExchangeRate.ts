@@ -13,8 +13,11 @@ const coinGeckoApi = axios.create();
 export const getExchangeRate = async (from: string, to: string): Promise<Error | number> => {
     const result: CoinGeckoReturnType = await coinGeckoApi.get(`https://api.coingecko.com/api/v3/simple/price?ids=${from}&vs_currencies=${to}`);
     // https://stackoverflow.com/questions/4994201/is-object-empty
-    if (result.status === 200 && Object.keys(result.data).length !== 0)
-        return result.data[from][to];
-    else
+    if (result.status === 200 && Object.keys(result.data).length === 0)
         return new Error(`"${from}" is not a valid token.`);
+    if (result.status === 200 && Object.keys(result.data).length !== 0 && Object.keys(result.data[from]).length === 0)
+        return new Error(`"${to}" is not a valid token.`);
+    return result.data[from][to];
+
+
 }
