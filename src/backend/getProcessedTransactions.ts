@@ -13,6 +13,7 @@ export const getProcessedTransactions = async (
     const time = moment
       .unix(Date.parse(tx.block_signed_at) / 1000)
       .format('YYYY-MM-DD h:mm A');
+    console.log(Date.parse(tx.block_signed_at));
 
     // TODO: further refine what is returned here
     const events = tx.log_events
@@ -27,11 +28,12 @@ export const getProcessedTransactions = async (
     // TODO: determine shape of data and calculate them
     return {
       hash: tx.tx_hash,
+      timestamp: Date.parse(tx.block_signed_at),
       time,
       sentAmount: 0,
       receivedAmount: 0,
       receivedAmountUSD: 0,
-      txFeeUSD: tx.gas_quote,
+      txFeeUSD: Number(tx.gas_quote.toFixed(2)),
       events: events,
     };
   });
