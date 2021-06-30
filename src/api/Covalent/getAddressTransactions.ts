@@ -1,11 +1,17 @@
-import { client } from "./client";
+import {
+  CovalentApiResponse,
+  ItemResponse,
+} from '../../constants/api/covalent/ResponseTypes';
+import { client } from './Client';
 
-export const getAddressBalance = async (address: string) => {
-  // console.log('getAddressBalance',address);
+export const getAddressTransactions = async (
+  address: string,
+): Promise<ItemResponse[]> => {
   try {
-    const result = await client.get(`https://api.covalenthq.com/v1/1/address/${address}/balances_v2/?nft=false`)
-    // console.log(result.data.data);
-    return result;
+    const result: CovalentApiResponse = await client.get(
+      `https://api.covalenthq.com/v1/1/address/${address}/transactions_v2/`,
+    );
+    return result.data.data.items;
   } catch (error) {
     if (error.response) {
       console.log('api response error', error.response);
@@ -21,4 +27,4 @@ export const getAddressBalance = async (address: string) => {
       return error.message;
     }
   }
-}
+};
