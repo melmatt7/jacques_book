@@ -38,7 +38,7 @@ export type ItemResponse = {
   from_address_label: string | null;
   to_address: string | null;
   to_address_label: string | null;
-  value: number;
+  value: string;
   value_quote: number;
   gas_offered: number;
   gas_spent: number;

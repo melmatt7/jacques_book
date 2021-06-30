@@ -15,6 +15,36 @@ export const getProcessedTransactions = async (
       .format('YYYY-MM-DD h:mm A');
     console.log(Date.parse(tx.block_signed_at));
 
+    if (tx.value !== '0') {
+      if (tx.to_address === address) {
+        // receive
+        return {
+          hash: tx.tx_hash,
+          timestamp: Date.parse(tx.block_signed_at),
+          time,
+          sentAmount: 0 / 1e18, // TODO: fix this shiet
+          sentAmountUSD: 0,
+          receivedAmount: Number(tx.value) / 1e18,
+          receivedAmountUSD: tx.value_quote,
+          txFeeUSD: Number(tx.gas_quote.toFixed(2)),
+          events: [],
+        };
+      } else {
+        // sent
+        return {
+          hash: tx.tx_hash,
+          timestamp: Date.parse(tx.block_signed_at),
+          time,
+          sentAmount: Number(tx.value) / 1e18,
+          sentAmountUSD: tx.value_quote,
+          receivedAmount: 0 / 1e18,
+          receivedAmountUSD: 0,
+          txFeeUSD: Number(tx.gas_quote.toFixed(2)),
+          events: [],
+        };
+      }
+    }
+
     // TODO: further refine what is returned here
     const events = tx.log_events
       ? tx.log_events.map(logEvent => {
@@ -30,8 +60,9 @@ export const getProcessedTransactions = async (
       hash: tx.tx_hash,
       timestamp: Date.parse(tx.block_signed_at),
       time,
-      sentAmount: 0,
-      receivedAmount: 0,
+      sentAmount: 0 / 1e18,
+      sentAmountUSD: 0,
+      receivedAmount: 0 / 1e18,
       receivedAmountUSD: 0,
       txFeeUSD: Number(tx.gas_quote.toFixed(2)),
       events: events,
