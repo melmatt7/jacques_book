@@ -1,0 +1,38 @@
+.wrap{
+    display: table;
+    /* table-layout: fixed; */
+    width:100%;
+}
+.left{
+    display: table-cell;
+    /* background-color: red; */
+    min-width: 600px;
+}
+.right{
+    width: 420px;
+    display: table-cell;
+    /* background-color: green; */
+}
+
+.table-content{
+    padding:5ch
+}
+.tablewrap{
+    border-radius: 6px;
+    width: 100%;
+    height: 100%;
+    box-shadow: 0 0 0 1px rgb(16 22 26 / 10%), 0 2px 4px rgb(16 22 26 / 20%), 0 8px 24px rgb(16 22 26 / 20%)
+}
+
+.bigfont{
+    font-size: 18px;
+}
+.smallfont{
+    color:dimgray;
+    font-size: 12px;
+}
+
+.detail{
+    background-color:#fff;
+}
+
