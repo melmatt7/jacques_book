@@ -36,3 +36,15 @@
     background-color:#fff;
 }
 
+.box:after{
+    content:"";
+    display:block;
+    clear:both;
+}
+.ra{
+    border-radius: 6px;
+}
+
+.topbord{
+    border-top: 1px solid #E1E8ED;
+}
