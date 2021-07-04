@@ -51,7 +51,7 @@ export const  LayoutContent:React.FC = ()=> {
                     <div className="bigfont">Transactions</div>
                     <div className="smallfont" style={{paddingBottom:"3ch"}}>todo</div>
                     {/* <Card elevation={Elevation.THREE}> */}
-                         <TransactionTable  />
+                         <HtmlTable  />
                     {/* </Card> */}
                 </div>
         </div>
@@ -73,8 +73,61 @@ export const  LayoutContent:React.FC = ()=> {
     );
 }
 
+const HtmlTable:React.FC<{
+
+}> = ({}) =>{
+    console.log('1')
+    const [ count, setCount ] = useState(false);
+    const [data, setData] = useState([
+        {"from":"ncccccccccccccccc","to":"xxxxxxxxxxxxxxxxx","txtype":"title1","amount":"title1","time":"5m ago","check":true},
+        {"from":"ncccccccccccccccc","to":"xxxxxxxxxxxxxxxxx","txtype":"title1","amount":"title1","time":"5m ago","check":false},
+        {"from":"ncccccccccccccccc","to":"xxxxxxxxxxxxxxxxx","txtype":"title1","amount":"title1","time":"5m ago","check":false},
+        {"from":"ncccccccccccccccc","to":"xxxxxxxxxxxxxxxxx","txtype":"title1","amount":"title1","time":"5m ago","check":false},
+        {"from":"ncccccccccccccccc","to":"xxxxxxxxxxxxxxxxx","txtype":"title1","amount":"title1","time":"5m ago","check":false},
+        {"from":"ncccccccccccccccc","to":"xxxxxxxxxxxxxxxxx","txtype":"title1","amount":"title1","time":"5m ago","check":false},
+        {"from":"ncccccccccccccccc","to":"xxxxxxxxxxxxxxxxx","txtype":"title1","amount":"title1","time":"5m ago","check":false},
+    ])
+    console.log(data, 'data')
+    const handleEnabledChange = (row:any, index)=>{
+        row.check=!row.check
+        data[index] = row;
+        setData([...data])
+        // setCount(!count)
+    }
+    return(
+        <table className="bp3-html-table .modifier" style={{width:'100%',borderRadius:'10px'}}>
+            <thead >
+                <tr >
+                    <th>FROM</th>
+                    <th>TO</th>
+                    <th>TX TYPE</th>
+                    <th>AMOUNT</th>
+                    <th>TIME</th>
+                    <th> </th>
+                </tr>
+            </thead>
+            <tbody className="tbtr">
+                {data.map((m,index)=> {
+                    return (<tr>
+                        <td>{m.from}</td>
+                        <td>{m.to}</td>
+                        <td>{m.txtype}</td>
+                        <td>{m.amount}</td>
+                        <td>{m.time}</td>
+                        <td><Checkbox checked={m.check} label="" onChange={() => handleEnabledChange(m,index)} /></td>
+                    </tr>
+                    )
+                })}
+
+            </tbody>
+        </table>
+    );
+
+}
+
 const TransactionTable:React.FC<{
 }> = ({})=> {
+    
     const [ count, setCount ] = useState([false,false]);
 
     let data =[{"from":"ncccccccccccccccc","to":"xxxxxxxxxxxxxxxxx","txtype":"title1","amount":"title1","time":"5m ago"},
@@ -136,9 +189,9 @@ const PlaysCard:React.FC<{
                 <PlayCardListItemIndex topborder={false} data={new carditemindex("ABC",130.3,3.5)} />
                 </div>
                 <div>
-                    <PlaysCardListItem  bkcolor='#62D96B' data={new carditem("111","2000","2100",10,10,"ETH")} />
-                    <PlaysCardListItem  bkcolor='#FF66A1' data={new carditem("222","2000","2100",10,10,"ETH")}  />
-                    <PlaysCardListItem  bkcolor='#62D96B' data={new carditem("333","2000","2100",10,10,"ETH")}  />
+                    <PlaysCardListItem  bkcolor='#D5FFC8' data={new carditem("Swap","2000","2100",10,10,"ETH")} />
+                    <PlaysCardListItem  bkcolor='#FFE8E0' data={new carditem("Swap","2000","2100",10,10,"ETH")}  />
+                    <PlaysCardListItem  bkcolor='#D5FFC8' data={new carditem("Swap","2000","2100",10,10,"ETH")}  />
                 </div>
                 <div style={{padding:'20px',color:'#2B95D6'}}>
                 <p style={{ lineHeight:'100%'}}>
@@ -203,7 +256,7 @@ const PlaysCardListItem:React.FC<{
 }>= ({bkcolor,data})=>{
     bkcolor = bkcolor || '';
     return (
-        <Card style={{padding:'none',borderRadius:'0px', backgroundColor:bkcolor,boxShadow:'none' }}>
+        <Card style={{padding:'none',borderRadius:'0px', backgroundColor:bkcolor,boxShadow:'0.1px 0.1px 3px #ddd',marginBottom:'1px' }}>
         <div style={{width:'100%',display:'inline-block',fontWeight:'bold'}}>
             <span style={{ float: 'left' }}>
                 {data.title}
@@ -212,7 +265,7 @@ const PlaysCardListItem:React.FC<{
                  @ ${data.priceold+ '/'+data.symbol}
             </span>
         </div>
-        <div style={{width:'100%',display:'inline-block',color:'#EBF1F5'}}>
+        <div style={{width:'100%',display:'inline-block',color:'#777'}}>
             <span style={{ float: 'left' }}>
             {data.amount*Number(data.pricenow)+ ' -> '+data.amount+' '+data.symbol}
             </span>
