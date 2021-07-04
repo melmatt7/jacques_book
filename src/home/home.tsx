@@ -40,15 +40,15 @@ export const Home:React.FC<{}> = ({})=>{
                     </div>
                     <div style={{width:'100%',}} >
                           <div className='flatwrap'>
-                          <div className='flatpart' style={{float:'left',width:'33.3333%',display:'table-cell'}}>
+                          <div className='flatpart' >
                                 <p>$234,567</p>
                                 <p> Total Assets</p>
                             </div>
-                            <div className='flatpart' style={{ float: 'left', width: '33.3333%', display: 'table-cell' }}>
+                            <div className='flatpart' >
                                 <p>$234,567</p>
                                 <p> Total Assets</p>
                             </div>
-                            <div className='flatpart' style={{ float: 'left', width: '33.3333%', display: 'table-cell' }}>
+                            <div className='flatpart'>
                                 <p>100%</p>
                                 <p> Total Assets</p>
                             </div>
@@ -56,8 +56,8 @@ export const Home:React.FC<{}> = ({})=>{
                     </div>
                 </div>
             </div>
-            <div style={{height:'600px'}}>
-                    <div style={{height:'50px'}}></div>
+            <div className='bottomdiv'>
+                    <div className='empdiv'></div>
                     <LayoutContent/>
             </div>
         </div>

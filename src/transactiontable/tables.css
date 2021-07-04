@@ -10,11 +10,31 @@
 }
 .right{
     /* width: 28%; */
-    min-width: 180px;
     max-width: 200px;
     display: table-cell;
     
     /* background-color: green; */
+}
+@media screen and (max-width:1200px) {
+    .right{
+        display: block;
+        /* float: left; */
+        overflow: hidden;
+        width: 100%;
+        max-width: none;
+
+    }
+    .left{
+        display: block;
+        /* float: left; */
+        clear: both;
+        overflow: hidden;
+    }
+    .wrap{
+        display: block;
+        /* table-layout: fixed; */
+        width:100%;
+    }
 }
 
 .table-content{
