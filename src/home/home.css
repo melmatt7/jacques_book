@@ -1,0 +1,24 @@
+
+.flatwrap{
+    border-radius: 1ch;
+    box-shadow: 0px 0px 0.3rem #D2D2D2;
+    background-color: #fff;
+    width: 60%;
+    margin: auto;
+    overflow: hidden;
+    padding: 20px 0;
+    margin-top: 50px;
+}
+
+.flatpart{
+
+}
+.flatpart > p:first-child{
+    color: #2B95D6;
+    font-weight:900;
+    font-size: 40px;
+    margin-bottom: 0;
+}
+.flatpart > p:last-child{
+
+}

@@ -95,7 +95,7 @@ const HtmlTable:React.FC<{
         // setCount(!count)
     }
     return(
-        <table className="bp3-html-table .modifier" style={{width:'100%',borderRadius:'10px'}}>
+        <table className="bp3-html-table .modifier tablewrap" >
             <thead >
                 <tr >
                     <th>FROM</th>
@@ -123,59 +123,6 @@ const HtmlTable:React.FC<{
         </table>
     );
 
-}
-
-const TransactionTable:React.FC<{
-}> = ({})=> {
-    
-    const [ count, setCount ] = useState([false,false]);
-
-    let data =[{"from":"ncccccccccccccccc","to":"xxxxxxxxxxxxxxxxx","txtype":"title1","amount":"title1","time":"5m ago"},
-    {"from":"ncccccccccccccccc","to":"xxxxxxxxxxxxxxxxx","txtype":"title1","amount":"title1","time":"5m ago"},
-    {"from":"ncccccccccccccccc","to":"xxxxxxxxxxxxxxxxx","txtype":"title1","amount":"title1","time":"5m ago"},
-    {"from":"ncccccccccccccccc","to":"xxxxxxxxxxxxxxxxx","txtype":"title1","amount":"title1","time":"5m ago"},
-    {"from":"ncccccccccccccccc","to":"xxxxxxxxxxxxxxxxx","txtype":"title1","amount":"title1","time":"5m ago"},
-    {"from":"ncccccccccccccccc","to":"xxxxxxxxxxxxxxxxx","txtype":"title1","amount":"title1","time":"5m ago"},
-    {"from":"ncccccccccccccccc","to":"xxxxxxxxxxxxxxxxx","txtype":"title1","amount":"title1","time":"5m ago"},
-];
-
-    const cellfromRenderer = (rowIndex: number) => {
-        return <Cell>{data[rowIndex].from}</Cell>
-    };
-    const celltoRenderer = (rowIndex: number) => {
-        return <Cell>{data[rowIndex].to}</Cell>
-    };
-    const celltxtypeRenderer = (rowIndex: number) => {
-        return <Cell>{data[rowIndex].txtype}</Cell>
-    };
-    const cellamountRenderer = (rowIndex: number) => {
-        return <Cell>{data[rowIndex].amount}</Cell>
-    };
-    const celltimeRenderer = (rowIndex: number) => {
-        return <Cell>{data[rowIndex].time}</Cell>
-    };
-    // <Checkbox checked={this.state.isEnabled} label="Enabled" onChange={this.handleEnabledChange} />
-    // {data[rowIndex].title}
-   const handleEnabledChange = (rowindex:number)=>{
-        count[rowindex]=!count[rowindex]
-        setCount(count)
-    }
-    const cellcheckRenderer = (rowIndex:number)=>{
-        return <Cell style={{textAlign:'center'}}   >
-            <Checkbox checked={count[rowIndex]} label="" onChange={()=>handleEnabledChange(rowIndex)} />
-        </Cell>
-    }
-
-    return (
-    <Table  enableFocusedCell={true} numRows={data.length} enableMultipleSelection={true} className="tablewrap">
-        <Column name="FROM" cellRenderer={cellfromRenderer}/>
-        <Column name="TO" cellRenderer={celltoRenderer}/>
-        <Column name="TX TYPE" cellRenderer={celltxtypeRenderer}/>
-        <Column name="AMOUNT" cellRenderer={cellamountRenderer}/>
-        <Column name="TIME" cellRenderer={celltimeRenderer}/>
-        <Column name="" cellRenderer={cellcheckRenderer}/>
-    </Table>
-    );
 }
 
 const PlaysCard:React.FC<{
