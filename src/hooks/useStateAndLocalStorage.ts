@@ -6,10 +6,7 @@ import useLocalStorage from 'react-use/lib/useLocalStorage';
  * @param storageKey Local Storage key
  * @param initValue Initial value if Local Storage is empty
  */
-export function useStateAndStorage<T>(
-  storageKey: string,
-  initValue: T,
-): [T, (newState: T) => void] {
+export function useStateAndStorage<T>(storageKey: string, initValue: T): [T, (newState: T) => void] {
   const [storage, setStorage] = useLocalStorage<T>(storageKey, initValue);
   const [value, setState] = useState(storage);
 
