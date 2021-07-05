@@ -1,14 +1,5 @@
 import React, { useState } from 'react';
-import styles from './Body.module.scss';
-import {
-  Button,
-  Card,
-  Elevation,
-  FormGroup,
-  Icon,
-  InputGroup,
-  Intent,
-} from '@blueprintjs/core';
+import { Button, Card, Elevation, FormGroup, Icon, InputGroup, Intent } from '@blueprintjs/core';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useAsyncFn } from 'react-use';
 import { getProcessedTransactions } from '../../backend/getProcessedTransactions';
@@ -26,8 +17,8 @@ export const Body: React.FC = () => {
   const onSubmit: SubmitHandler<FormInput> = async data => {
     setAddress(data.address);
     const result = await fetch(data.address);
-    setTransactions(result);
     console.log(result);
+    setTransactions(result);
   };
 
   const [state, fetch] = useAsyncFn(async (address: string) => {
@@ -36,43 +27,40 @@ export const Body: React.FC = () => {
   }, []);
 
   return (
-    <div className={styles.root}>
+    <div>
       <div>
-        <div className={styles.container}>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <FormGroup label="Your wallet address" labelFor="address">
-              <InputGroup
-                id="address"
-                placeholder="wallet address"
-                name="address"
-                defaultValue={address}
-                inputRef={register({ required: true })}
-                className={styles.addressInputGroup}
-              />
-              {errors.address && 'Address is required'}
-            </FormGroup>
-            <Button type="submit">Save</Button>
-          </form>
-        </div>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <FormGroup label="Your wallet address" labelFor="address">
+            <InputGroup
+              id="address"
+              placeholder="wallet address"
+              name="address"
+              defaultValue={address}
+              inputRef={register({ required: true })}
+            />
+            {errors.address && 'Address is required'}
+          </FormGroup>
+          <Button type="submit">Save</Button>
+        </form>
       </div>
-      {}
       {transactions && (
-        <div className={styles.wrapper}>
-          <Card className={styles.root} elevation={Elevation.ONE}>
-            <div className={styles.address}>{address}</div>
-            <Button className={styles.editButton} minimal type="button">
+        <div>
+          <Card elevation={Elevation.ONE}>
+            <div>{address}</div>
+            <Button minimal type="button">
               <Icon icon="edit" intent={Intent.PRIMARY} />
             </Button>
           </Card>
-          <div className={styles.transactionItems}>
+          <div>
             <table>
               <thead>
                 <tr>
                   <th>Tx Hash</th>
                   <th>Time</th>
-                  <th>Sent Amount</th>
-                  <th>receivedAmount</th>
-                  <th>receivedAmountUSD</th>
+                  <th>SentAmount</th>
+                  <th>SentAmountUSD</th>
+                  <th>ReceivedAmount</th>
+                  <th>ReceivedAmountUSD</th>
                   <th>txFeeUSD</th>
                   <th>Event</th>
                 </tr>
@@ -80,14 +68,19 @@ export const Body: React.FC = () => {
               <tbody>
                 {transactions.map(tx => {
                   return (
-                    <tr key={tx.hash}>
-                      <td>{tx.hash}</td>
+                    <tr key={tx.txHash}>
+                      <td>{tx.txHash}</td>
                       <td>{tx.time}</td>
-                      <td>{tx.sentAmount}</td>
-                      <td>{tx.receivedAmount}</td>
-                      <td>{tx.receivedAmountUSD}</td>
+                      <td>
+                        {tx.sentAmount.toFixed(6)} {tx.sentTokenSymbol}
+                      </td>
+                      <td>${tx.sentAmountUSD}</td>
+                      <td>
+                        {tx.receivedAmount.toFixed(6)} {tx.receivedTokenSymbol}
+                      </td>
+                      <td>${tx.receivedAmountUSD}</td>
                       <td>${tx.txFeeUSD}</td>
-                      <td>{tx.events[0]}</td>
+                      <td>{tx.events}</td>
                     </tr>
                   );
                 })}

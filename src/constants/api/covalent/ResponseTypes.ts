@@ -1,13 +1,15 @@
+export type ParamsResponse = {
+  name: string;
+  type: string;
+  indexed: boolean;
+  decoded: boolean;
+  value: string;
+};
+
 export type DecodedResponse = {
   name: string;
   signature: string;
-  params: {
-    name: string;
-    type: string;
-    indexed: boolean;
-    decoded: boolean;
-    value: string;
-  }[];
+  params: ParamsResponse[];
 };
 
 export type EventResponse = {
