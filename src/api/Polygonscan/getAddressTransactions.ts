@@ -13,8 +13,7 @@ export const getAddressTransactions = async (address: string) => {
     },
     header: {
       accept: 'application/json/text',
-      'Access-Control-Allow-Headers':
-        'http://localhost:3000, X-Requested-With, Content-Type, Accept',
+      'Access-Control-Allow-Headers': 'http://localhost:3000, X-Requested-With, Content-Type, Accept',
       'Access-Control-Allow-Origin': '*',
     },
   };

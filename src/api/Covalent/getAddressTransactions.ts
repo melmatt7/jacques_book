@@ -1,12 +1,7 @@
-import {
-  CovalentApiResponse,
-  ItemResponse,
-} from '../../constants/api/covalent/ResponseTypes';
+import { CovalentApiResponse, ItemResponse } from '../../constants/api/covalent/ResponseTypes';
 import { client } from './Client';
 
-export const getAddressTransactions = async (
-  address: string,
-): Promise<ItemResponse[]> => {
+export const getAddressTransactions = async (address: string): Promise<ItemResponse[]> => {
   try {
     const result: CovalentApiResponse = await client.get(
       `https://api.covalenthq.com/v1/1/address/${address}/transactions_v2/`,
