@@ -191,6 +191,7 @@ export const getProcessedTransactions = async (address: string): Promise<Transac
       }
     });
 
+
     // TODO: determine shape of data and calculate them
     return {
       txHash: tx.tx_hash,
@@ -206,5 +207,15 @@ export const getProcessedTransactions = async (address: string): Promise<Transac
       events: events,
     };
   });
+
+  for (let i=0; i< txs.length; i++) {
+    processedTx[i].sentAmount = Number(processedTx[i].sentAmount.toFixed(6))
+    processedTx[i].sentAmountUSD = Number(processedTx[i].sentAmountUSD.toFixed(6))
+    processedTx[i].receivedAmount = Number(processedTx[i].receivedAmount.toFixed(6))
+    processedTx[i].receivedAmountUSD = Number(processedTx[i].receivedAmountUSD.toFixed(6))
+
+  }
+  
+
   return processedTx;
 };
