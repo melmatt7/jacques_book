@@ -10,46 +10,46 @@ type FormInput = {
   address: string;
 };
 
-function handleDragStart(e) {
-	drag = this;
-	e.dataTransfer.effectAllowed = 'move';
-	e.dataTransfer.setData('text/html', this.innerHTML);
-}
+// function handleDragStart(e) {
+// 	drag = this;
+// 	e.dataTransfer.effectAllowed = 'move';
+// 	e.dataTransfer.setData('text/html', this.innerHTML);
+// }
 
-function handleDragOver(e) {
-	if (e.preventDefault) {
-		e.preventDefault();
-	}
+// function handleDragOver(e) {
+// 	if (e.preventDefault) {
+// 		e.preventDefault();
+// 	}
 
-	return false;
-}
+// 	return false;
+// }
 
-function handleDragEnter(e) {
-	this.classList.add('over');
-}
+// function handleDragEnter(e) {
+// 	this.classList.add('over');
+// }
 
-function handleDragLeave(e) {
-	this.classList.remove('over');
-}
+// function handleDragLeave(e) {
+// 	this.classList.remove('over');
+// }
 
-function handleDrop(e) {
-	if (e.stopPropagation) {
-		e.stopPropagation();
-	}
-  if (this.className == "wrap") {
-    drag.parentNode.removeChild(drag);
-  } else if (drag.parentNode.parentNode.className != this.parentNode.parentNode.className) {
-    this.parentNode.appendChild(drag);
-	}
+// function handleDrop(e) {
+// 	if (e.stopPropagation) {
+// 		e.stopPropagation();
+// 	}
+//   if (this.className == "wrap") {
+//     drag.parentNode.removeChild(drag);
+//   } else if (drag.parentNode.parentNode.className != this.parentNode.parentNode.className) {
+//     this.parentNode.appendChild(drag);
+// 	}
 
-	return false;
-}
+// 	return false;
+// }
 
-function handleDragEnd(e) {
-	for (var i = 0; i < rows.length; i++) {
-		rows[i].classList.remove('over');
-	}
-}
+// function handleDragEnd(e) {
+// 	for (var i = 0; i < rows.length; i++) {
+// 		rows[i].classList.remove('over');
+// 	}
+// }
 
 export const Body: React.FC = () => {
   const [address, setAddress] = useState('');
@@ -88,9 +88,12 @@ export const Body: React.FC = () => {
       <Container>
         <Row>
           <div id="wrap" className="wrap" draggable="true">
-          <Col>
-            {transactions && (
-                <table className="table tb-1"><caption><h4>Transaction History</h4></caption>
+            <Col>
+              {transactions && (
+                <table className="table">
+                  <caption>
+                    <h4>Transaction History</h4>
+                  </caption>
                   <thead className="t_sortable">
                     <tr>
                       <th>Time</th>
@@ -122,28 +125,36 @@ export const Body: React.FC = () => {
                     })}
                   </tbody>
                 </table>
-            )}
-          </Col>
-          <Col>{transactions && (<div>
-                <table className="table tb-2"><caption><h4>Plays</h4></caption>
-                  <thead className="t_sortable">
-                    <tr>
-                      <th>Time</th>
-                      <th>SentAmount</th>
-                      <th>SentAmountUSD</th>
-                      <th>ReceivedAmount</th>
-                      <th>ReceivedAmountUSD</th>
-                      <th>txFeeUSD</th>
-                      <th>Event</th>
-                    </tr>
-                  </thead>
-                  <tbody><tr draggable="true" className="drag-row row-2"></tr></tbody>
-                </table>
-              </div>)}</Col>
-              </div>
+              )}
+            </Col>
+            <Col>
+              {transactions && (
+                <div>
+                  <table className="table tb-2">
+                    <caption>
+                      <h4>Plays</h4>
+                    </caption>
+                    <thead className="t_sortable">
+                      <tr>
+                        <th>Time</th>
+                        <th>SentAmount</th>
+                        <th>SentAmountUSD</th>
+                        <th>ReceivedAmount</th>
+                        <th>ReceivedAmountUSD</th>
+                        <th>txFeeUSD</th>
+                        <th>Event</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr draggable="true" className="drag-row row-2"></tr>
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </Col>
+          </div>
         </Row>
       </Container>
-      
     </div>
   );
 };
