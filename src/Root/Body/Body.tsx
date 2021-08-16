@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Button, Card, Elevation, FormGroup, Icon, InputGroup, Intent } from '@blueprintjs/core';
+// import {  } from 'antd';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useAsyncFn } from 'react-use';
 import { getProcessedTransactions } from '../../backend/getProcessedTransactions';
 import { TransactionData } from '../../constants/transaction-fetcher';
 import { Row, Col, Container } from 'react-bootstrap';
+import { useTable } from 'react-table';
 
 type FormInput = {
   address: string;
@@ -68,6 +70,56 @@ export const Body: React.FC = () => {
     return result;
   }, []);
 
+  // const data = useMemo(() => transactions, []);
+  // const columns = useMemo(
+  //   () => [
+  //     {
+  //       Header: 'TxHash',
+  //       accessor: 'txHash',
+  //     },
+  //     {
+  //       Header: 'Time',
+  //       accessor: 'time',
+  //     },
+
+  //     {
+  //       Header: 'Sent Amount',
+  //       accessor: 'sentAmount',
+  //     },
+  //     {
+  //       Header: 'sentAmountUSD',
+  //       accessor: 'sentAmountUSD',
+  //     },
+  //     {
+  //       Header: 'sentTokenSymbol',
+  //       accessor: 'sentTokenSymbol',
+  //     },
+  //     {
+  //       Header: 'receivedAmount',
+  //       accessor: 'receivedAmount',
+  //     },
+  //     {
+  //       Header: 'receivedAmountUSD',
+  //       accessor: 'receivedAmountUSD',
+  //     },
+  //     {
+  //       Header: 'receivedTokenSymbol',
+  //       accessor: 'receivedTokenSymbol',
+  //     },
+  //     {
+  //       Header: 'txFeeUSD',
+  //       accessor: 'txFeeUSD',
+  //     },
+  //     {
+  //       Header: 'events',
+  //       accessor: 'events',
+  //     },
+  //   ],
+  //   [],
+  // );
+
+  // const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable({ columns, data });
+
   return (
     <div>
       <div>
@@ -85,6 +137,11 @@ export const Body: React.FC = () => {
           <Button type="submit">Save</Button>
         </form>
       </div>
+      {/* <table {...getTableProps()}>
+        {headerGroups.map(headerGroup => (
+          <tr {...headerGroup.getHeaderGroupProps()}>...</tr>
+        ))}
+      </table> */}
       <Container>
         <Row>
           <div id="wrap" className="wrap" draggable="true">
@@ -106,7 +163,7 @@ export const Body: React.FC = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {transactions.map(tx => {
+                    {transactions?.map(tx => {
                       return (
                         <tr key={tx.txHash} draggable="true" className="drag-row row-1">
                           <td>{tx.time}</td>

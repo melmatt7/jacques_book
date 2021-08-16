@@ -15,7 +15,10 @@ export type TransactionData = {
 export enum TransactionTag {
   ETH_TRANSFER = 'ETH Transfer',
   ERC20_TRANSFER = 'ERC20 Transfer',
+  NOT_ERC20_TRANSFER = 'Not ERC20 Transfer',
   TX_CANCELLATION = 'Transaction Cancellation',
   STAKE = 'Stake',
   EXIT_STAKE = 'Exit Stake',
+  RECEIVE = 'Receive',
+  SENT = 'Sent',
 }

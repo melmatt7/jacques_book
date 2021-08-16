@@ -6,7 +6,7 @@ type CoinApiResponse = { rate: number };
 export const getExchangeRateAtSpecificTime = async (
   from: string,
   to: string,
-  timestamp: string,
+  timestamp: number,
 ): Promise<CoinApiResponse> => {
   try {
     const response: ApiResponse = await axios.get(
