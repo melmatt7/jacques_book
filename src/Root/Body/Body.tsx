@@ -3,7 +3,7 @@ import { Button, Card, Elevation, FormGroup, Icon, InputGroup, Intent } from '@b
 // import {  } from 'antd';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useAsyncFn } from 'react-use';
-import { getProcessedTransactions } from '../../backend/getProcessedTransactions';
+import { getProcessedTransactions, ProcessedResponse } from '../../backend/processTransactions';
 import { TransactionData } from '../../constants/transaction-fetcher';
 import { Row, Col, Container } from 'react-bootstrap';
 import { useTable } from 'react-table';
@@ -55,7 +55,7 @@ type FormInput = {
 
 export const Body: React.FC = () => {
   const [address, setAddress] = useState('');
-  const [transactions, setTransactions] = useState<TransactionData[]>();
+  const [transactions, setTransactions] = useState<ProcessedResponse[]>();
 
   const { register, errors, handleSubmit } = useForm<FormInput>();
   const onSubmit: SubmitHandler<FormInput> = async data => {
@@ -67,6 +67,7 @@ export const Body: React.FC = () => {
 
   const [state, fetch] = useAsyncFn(async (address: string) => {
     const result = await getProcessedTransactions(address);
+    console.log(result);
     return result;
   }, []);
 
@@ -165,19 +166,20 @@ export const Body: React.FC = () => {
                   <tbody>
                     {transactions?.map(tx => {
                       return (
-                        <tr key={tx.txHash} draggable="true" className="drag-row row-1">
-                          <td>{tx.time}</td>
-                          <td>
-                            {tx.sentAmount.toFixed(6)} {tx.sentTokenSymbol}
-                          </td>
-                          <td>${tx.sentAmountUSD}</td>
-                          <td>
-                            {tx.receivedAmount.toFixed(6)} {tx.receivedTokenSymbol}
-                          </td>
-                          <td>${tx.receivedAmountUSD}</td>
-                          <td>${tx.txFeeUSD}</td>
-                          <td>{tx.events}</td>
-                        </tr>
+                        // <tr key={tx.txHash} draggable="true" className="drag-row row-1">
+                        //   <td>{tx.time}</td>
+                        //   <td>
+                        //     {tx.sentAmount.toFixed(6)} {tx.sentTokenSymbol}
+                        //   </td>
+                        //   <td>${tx.sentAmountUSD}</td>
+                        //   <td>
+                        //     {tx.receivedAmount.toFixed(6)} {tx.receivedTokenSymbol}
+                        //   </td>
+                        //   <td>${tx.receivedAmountUSD}</td>
+                        //   <td>${tx.txFeeUSD}</td>
+                        //   <td>{tx.events}</td>
+                        // </tr>
+                        <></>
                       );
                     })}
                   </tbody>

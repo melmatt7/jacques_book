@@ -19,7 +19,7 @@ type TokenBalance = {
   balance: number;
   balanceUSD: number;
 };
-type ProcessedResponse = {
+export type ProcessedResponse = {
   txHash: string;
   labels: TransactionTag[];
   events: string[];
