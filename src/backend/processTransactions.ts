@@ -3,8 +3,11 @@ import { getAddressTransactions } from '../api/Covalent/getAddressTransactions';
 import moment from 'moment';
 import { TransactionData, TransactionTag } from '../constants/transaction-fetcher';
 import BigNumber from 'bignumber.js';
-import { ItemResponse } from '../constants/api/covalent/ResponseTypes';
+import { ItemsEntity, QueryResponse } from '../constants/api/covalent/ResponseTypes';
 import { getExchangeRateAtSpecificTime } from '../api/getExchangeRateAtSpecificTime';
+
+import { covalentData } from '../sample_data/covalentData';
+import { getHistoricalTokenPrice } from '../api/Covalent/getHistoricalTokenPrice';
 
 export type TransferInfo = {
   from: string;
@@ -31,7 +34,7 @@ export type ProcessedResponse = {
 };
 
 export const buildResponse = (
-  txData: ItemResponse,
+  txData: ItemsEntity,
   labels: TransactionTag[] = [],
   events: string[] = [],
   sentTokenBalances: TokenBalance[] = [],
@@ -40,7 +43,7 @@ export const buildResponse = (
   const time = moment.unix(Date.parse(txData.block_signed_at) / 1000).format('YYYY-MM-DD h:mm A');
   const txFee = txData.gas_price * txData.gas_spent;
   const txFeeUSD = Number(txData.gas_quote.toFixed(2));
-  return {
+  const result = {
     txHash: txData.tx_hash,
     labels,
     events,
@@ -50,26 +53,30 @@ export const buildResponse = (
     sentTokenBalances,
     receivedTokenBalances,
   };
+  console.log(result);
+  return result;
 };
 
 export const getProcessedTransactions = async (address: string): Promise<ProcessedResponse[]> => {
-  const txs = await getAddressTransactions(address);
+  // const txs = await getAddressTransactions(address);
+  const txs: QueryResponse = covalentData;
 
   const processedTx = await Promise.all(
-    txs.map(async tx => {
+    txs.data.items.map(async tx => {
       const labels = [];
-      const timestamp = +moment.unix(Date.parse(tx.block_signed_at) / 1000).format();
+      const timestamp = Number(moment.unix(Date.parse(tx.block_signed_at) / 1000).format('X'));
 
       // a tx cancellation
       if (tx.from_address === tx.to_address) {
         labels.push(TransactionTag.TX_CANCELLATION);
+        console.log('tx cancel');
         return buildResponse(tx, labels);
       }
 
+      /**
       // simple ETH transfer
       if (tx.value_quote > 0 && tx.log_events.length === 0) {
         labels.push(TransactionTag.ETH_TRANSFER);
-        // const priceUSD = (await getExchangeRateAtSpecificTime('ETH', 'USD', timestamp)).rate;
         const tokenBalance = {
           symbol: 'ETH',
           address: '0x0000000000000000000000000000000000000000',
@@ -89,13 +96,13 @@ export const getProcessedTransactions = async (address: string): Promise<Process
           throw Error("ETH transfer, from and to are neither user's address");
         }
       }
+       */
 
       let sentTokenBalances: TokenBalance[] = [];
       let receivedTokenBalances: TokenBalance[] = [];
 
       // add eth transfer into sentBalance
       if (tx.value_quote > 0) {
-        // const priceUSD = (await getExchangeRateAtSpecificTime('ETH', 'USD', timestamp)).rate;
         const sentEth: TokenBalance = {
           symbol: 'ETH',
           address: '0x0000000000000000000000000000000000000000',
@@ -110,7 +117,8 @@ export const getProcessedTransactions = async (address: string): Promise<Process
       // read the events
       for (let i = 0; i < tx.log_events.length; i++) {
         const event = tx.log_events[i];
-        events.push(event);
+        const eventName = tx.log_events[i].decoded.name;
+        events.push(eventName);
         if (event.decoded == null) {
           continue;
         }
@@ -132,14 +140,16 @@ export const getProcessedTransactions = async (address: string): Promise<Process
             tokenDecimals: event.sender_contract_decimals,
           };
           event.decoded.params.map(param => {
-            if (param.name === 'from') {
-              transferInfo.from = param.value.toLowerCase();
-            }
-            if (param.name === 'to') {
-              transferInfo.to = param.value.toLowerCase();
-            }
-            if (param.name === 'value') {
-              transferInfo.value = Number(param.value) ?? 0;
+            if (typeof param.value == 'string') {
+              if (param.name === 'from') {
+                transferInfo.from = param.value.toLowerCase();
+              }
+              if (param.name === 'to') {
+                transferInfo.to = param.value.toLowerCase();
+              }
+              if (param.name === 'value') {
+                transferInfo.value = Number(param.value) ?? 0;
+              }
             }
           });
           if (transferInfo.from.length === 0 || transferInfo.to.length === 0) {
@@ -150,13 +160,24 @@ export const getProcessedTransactions = async (address: string): Promise<Process
             .div(10 ** transferInfo.tokenDecimals)
             .toNumber();
           let priceUSD: number;
+
+          // try {
+          //   priceUSD = (
+          //     await getExchangeRateAtSpecificTime(transferInfo.tokenSymbol, 'USD', timestamp)
+          //   ).rate;
+          // } catch (error) {
+          //   throw Error(`Error fetching exchange rate for ${transferInfo.tokenSymbol}`);
+          // }
           try {
-            priceUSD = (
-              await getExchangeRateAtSpecificTime(transferInfo.tokenSymbol, 'USD', timestamp)
-            ).rate;
+            const response = await getHistoricalTokenPrice(transferInfo.tokenAddress);
+            // console.log(response.data);
+            priceUSD = Number(response.data[0].prices[0].price);
           } catch (error) {
-            throw Error(`Error fetching exchange rate for ${transferInfo.tokenSymbol}`);
+            priceUSD = 0;
+            console.log(`Error fetching exchange rate for ${transferInfo.tokenSymbol}`);
+            // throw Error(`Error fetching exchange rate for ${transferInfo.tokenSymbol}`);
           }
+          // console.log(priceUSD);
 
           const tokenBalance: TokenBalance = {
             symbol: transferInfo.tokenSymbol,

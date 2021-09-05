@@ -1,6 +1,5 @@
 import React, { useState, useMemo } from 'react';
 import { Button, Card, Elevation, FormGroup, Icon, InputGroup, Intent } from '@blueprintjs/core';
-// import {  } from 'antd';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useAsyncFn } from 'react-use';
 import { getProcessedTransactions, ProcessedResponse } from '../../backend/processTransactions';
@@ -12,56 +11,14 @@ type FormInput = {
   address: string;
 };
 
-// function handleDragStart(e) {
-// 	drag = this;
-// 	e.dataTransfer.effectAllowed = 'move';
-// 	e.dataTransfer.setData('text/html', this.innerHTML);
-// }
-
-// function handleDragOver(e) {
-// 	if (e.preventDefault) {
-// 		e.preventDefault();
-// 	}
-
-// 	return false;
-// }
-
-// function handleDragEnter(e) {
-// 	this.classList.add('over');
-// }
-
-// function handleDragLeave(e) {
-// 	this.classList.remove('over');
-// }
-
-// function handleDrop(e) {
-// 	if (e.stopPropagation) {
-// 		e.stopPropagation();
-// 	}
-//   if (this.className == "wrap") {
-//     drag.parentNode.removeChild(drag);
-//   } else if (drag.parentNode.parentNode.className != this.parentNode.parentNode.className) {
-//     this.parentNode.appendChild(drag);
-// 	}
-
-// 	return false;
-// }
-
-// function handleDragEnd(e) {
-// 	for (var i = 0; i < rows.length; i++) {
-// 		rows[i].classList.remove('over');
-// 	}
-// }
-
 export const Body: React.FC = () => {
   const [address, setAddress] = useState('');
-  const [transactions, setTransactions] = useState<ProcessedResponse[]>();
+  let [transactions, setTransactions] = useState<ProcessedResponse[]>();
 
   const { register, errors, handleSubmit } = useForm<FormInput>();
   const onSubmit: SubmitHandler<FormInput> = async data => {
     setAddress(data.address);
     const result = await fetch(data.address);
-    console.log(result);
     setTransactions(result);
   };
 
@@ -70,56 +27,6 @@ export const Body: React.FC = () => {
     console.log(result);
     return result;
   }, []);
-
-  // const data = useMemo(() => transactions, []);
-  // const columns = useMemo(
-  //   () => [
-  //     {
-  //       Header: 'TxHash',
-  //       accessor: 'txHash',
-  //     },
-  //     {
-  //       Header: 'Time',
-  //       accessor: 'time',
-  //     },
-
-  //     {
-  //       Header: 'Sent Amount',
-  //       accessor: 'sentAmount',
-  //     },
-  //     {
-  //       Header: 'sentAmountUSD',
-  //       accessor: 'sentAmountUSD',
-  //     },
-  //     {
-  //       Header: 'sentTokenSymbol',
-  //       accessor: 'sentTokenSymbol',
-  //     },
-  //     {
-  //       Header: 'receivedAmount',
-  //       accessor: 'receivedAmount',
-  //     },
-  //     {
-  //       Header: 'receivedAmountUSD',
-  //       accessor: 'receivedAmountUSD',
-  //     },
-  //     {
-  //       Header: 'receivedTokenSymbol',
-  //       accessor: 'receivedTokenSymbol',
-  //     },
-  //     {
-  //       Header: 'txFeeUSD',
-  //       accessor: 'txFeeUSD',
-  //     },
-  //     {
-  //       Header: 'events',
-  //       accessor: 'events',
-  //     },
-  //   ],
-  //   [],
-  // );
-
-  // const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable({ columns, data });
 
   return (
     <div>
@@ -166,20 +73,15 @@ export const Body: React.FC = () => {
                   <tbody>
                     {transactions?.map(tx => {
                       return (
-                        // <tr key={tx.txHash} draggable="true" className="drag-row row-1">
-                        //   <td>{tx.time}</td>
-                        //   <td>
-                        //     {tx.sentAmount.toFixed(6)} {tx.sentTokenSymbol}
-                        //   </td>
-                        //   <td>${tx.sentAmountUSD}</td>
-                        //   <td>
-                        //     {tx.receivedAmount.toFixed(6)} {tx.receivedTokenSymbol}
-                        //   </td>
-                        //   <td>${tx.receivedAmountUSD}</td>
-                        //   <td>${tx.txFeeUSD}</td>
-                        //   <td>{tx.events}</td>
-                        // </tr>
-                        <></>
+                        <tr key={tx.txHash} draggable="true" className="drag-row row-1">
+                          <td>{tx.time}</td>
+                          <td>{tx.time}</td>
+                          <td>${tx.receivedTokenBalances}</td>
+                          <td>{/* {tx.receivedAmount.toFixed(6)} {tx.receivedTokenSymbol} */}</td>
+                          {/* <td>${tx.receivedAmountUSD}</td> */}
+                          <td>${tx.txFeeUSD}</td>
+                          <td>{tx.events}</td>
+                        </tr>
                       );
                     })}
                   </tbody>
